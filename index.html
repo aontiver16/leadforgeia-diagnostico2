@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadForgeIA — Diagnóstico Comercial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%231036D9'/><stop offset='100%25' stop-color='%23D6EBFF'/></linearGradient></defs><rect rx='12' width='100' height='100' fill='%230A1028'/><rect x='22' y='58' width='10' height='22' rx='2' fill='url(%23g)'/><rect x='36' y='48' width='10' height='32' rx='2' fill='url(%23g)'/><rect x='50' y='36' width='10' height='44' rx='2' fill='url(%23g)'/><rect x='64' y='24' width='10' height='56' rx='2' fill='url(%23g)'/><path d='M 78 18 L 78 8 L 88 8 L 88 18 Z' fill='%23D6EBFF'/><polygon points='83,4 78,8 88,8' fill='%23D6EBFF'/></text></svg>">
+    <style>
+        :root {
+            --navy: #0A1028;
+            --deep-navy: #000B29;
+            --inst-navy: #152051;
+            --corp-blue: #203079;
+            --accent: #2A40A2;
+            --electric: #1036D9;
+            --light-blue: #D6EBFF;
+            --white: #FFFFFF;
+            --gray-text: #B0B8C8;
+            --border: rgba(176, 184, 200, 0.2);
+            --input-bg: rgba(255,255,255,0.05);
+            --input-focus: rgba(16, 54, 217, 0.3);
+            --section-bg: rgba(21, 32, 81, 0.5);
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        /* NAV */
+        nav {
+            background: var(--deep-navy);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--electric);
+            position: sticky; top: 0; z-index: 100;
+        }
+        nav .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        nav .logo-text span { color: var(--light-blue); }
+        nav .logo-sub {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.55rem;
+            font-weight: 600;
+            color: var(--gray-text);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        nav .brand-group { display: flex; flex-direction: column; }
+        nav .tag {
+            background: var(--electric); color: var(--white); font-size: 0.7rem;
+            font-family: 'Montserrat', sans-serif; font-weight: 700;
+            padding: 0.3rem 0.9rem; border-radius: 99px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        /* HERO */
+        .hero {
+            background: linear-gradient(160deg, var(--navy) 0%, var(--deep-navy) 50%, var(--inst-navy) 100%);
+            padding: 3.5rem 2rem; text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem; font-weight: 800;
+            margin-bottom: 0.7rem;
+            background: linear-gradient(90deg, var(--white), var(--light-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            color: var(--gray-text); max-width: 600px; margin: 0 auto 1.5rem;
+            font-size: 0.95rem;
+        }
+        .hero .tagline {
+            font-size: 0.85rem;
+            color: var(--light-blue);
+            font-style: italic;
+            max-width: 550px;
+            margin: 0 auto 1.5rem;
+            opacity: 0.8;
+        }
+        .hero .stats {
+            display: flex; justify-content: center; gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .hero .stat { text-align: center; }
+        .hero .stat .num {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem; font-weight: 800;
+            color: var(--electric);
+        }
+        .hero .stat .label {
+            font-size: 0.7rem; color: var(--gray-text);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        /* PROGRESS */
+        .progress-bar {
+            background: var(--inst-navy); border-bottom: 1px solid var(--border);
+            padding: 0.7rem 2rem; position: sticky; top: 68px; z-index: 99;
+        }
+        .progress-bar .track {
+            background: rgba(255,255,255,0.08); border-radius: 99px;
+            height: 6px; overflow: hidden;
+        }
+        .progress-bar .fill {
+            background: linear-gradient(90deg, var(--electric), var(--light-blue));
+            height: 100%; border-radius: 99px; transition: width 0.4s ease;
+            width: 0%;
+        }
+        .progress-bar .label {
+            font-size: 0.75rem; color: var(--gray-text);
+            margin-top: 0.3rem; text-align: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+        /* FORM */
+        .container { max-width: 850px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+        .section {
+            background: var(--section-bg);
+            border-radius: 12px; margin-bottom: 1.25rem;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .section-header {
+            background: linear-gradient(135deg, var(--inst-navy), var(--corp-blue));
+            color: var(--white); padding: 1rem 1.5rem; cursor: pointer;
+            display: flex; align-items: center; gap: 0.75rem;
+            user-select: none; transition: opacity 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .section-header:hover { opacity: 0.9; }
+        .section-header .icon { font-size: 1.2rem; }
+        .section-header h2 { font-size: 1rem; font-weight: 700; flex: 1; }
+        .section-header .arrow {
+            font-size: 1rem; transition: transform 0.3s; color: var(--light-blue);
+        }
+        .section-header.active .arrow { transform: rotate(180deg); }
+        .section-body {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+        }
+        .section-body.open { max-height: 6000px; }
+        .section-content { padding: 1.5rem; }
+        .field { margin-bottom: 1.25rem; }
+        .field:last-child { margin-bottom: 0; }
+        .field label {
+            display: block; font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem; font-weight: 600;
+            color: var(--light-blue); margin-bottom: 0.4rem;
+        }
+        .field .hint {
+            font-size: 0.8rem; color: var(--gray-text); margin-top: 0.2rem;
+            font-style: italic;
+        }
+        .field label .req { color: #EF4444; margin-left: 2px; }
+        input[type="text"], input[type="email"], input[type="tel"],
+        input[type="url"], input[type="number"], select, textarea {
+            width: 100%; padding: 0.7rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px; font-size: 0.95rem;
+            font-family: 'Roboto', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: var(--input-bg);
+            color: var(--white);
+        }
+        input::placeholder, textarea::placeholder {
+            color: rgba(176, 184, 200, 0.5);
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none; border-color: var(--electric);
+            box-shadow: 0 0 0 3px var(--input-focus);
+        }
+        select option { background: var(--navy); color: var(--white); }
+        textarea { resize: vertical; min-height: 80px; }
+        select { cursor: pointer; }
+        .row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .row > .field { flex: 1; min-width: 200px; }
+        .checkboxes { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .checkboxes label {
+            display: flex; align-items: center; gap: 0.4rem;
+            font-size: 0.82rem; font-weight: 500; padding: 0.35rem 0.7rem;
+            background: rgba(255,255,255,0.04); border-radius: 8px;
+            cursor: pointer; border: 1px solid var(--border);
+            transition: all 0.2s; color: var(--gray-text);
+        }
+        .checkboxes label:has(input:checked) {
+            background: rgba(16, 54, 217, 0.2);
+            border-color: var(--electric); color: var(--light-blue);
+        }
+        .checkboxes input[type="checkbox"] { accent-color: var(--electric); }
+        .range-field { display: flex; gap: 1rem; align-items: center; }
+        .range-field input[type="range"] { flex: 1; accent-color: var(--electric); }
+        .range-field .val {
+            background: var(--electric); color: var(--white);
+            padding: 0.2rem 0.6rem; border-radius: 8px;
+            font-size: 0.8rem; font-weight: 700; min-width: 30px;
+            text-align: center; font-family: 'Montserrat', sans-serif;
+        }
+        .range-field span { color: var(--gray-text); font-size: 0.75rem; }
+        /* FILE UPLOAD */
+        .upload-zone {
+            border: 2px dashed var(--border); border-radius: 10px;
+            padding: 1.25rem; text-align: center; cursor: pointer;
+            transition: all 0.2s; background: rgba(255,255,255,0.02);
+            position: relative;
+        }
+        .upload-zone:hover { border-color: var(--electric); background: rgba(16,54,217,0.05); }
+        .upload-zone input[type="file"] {
+            position: absolute; inset: 0; opacity: 0; cursor: pointer;
+        }
+        .upload-zone .icon { font-size: 1.8rem; margin-bottom: 0.3rem; }
+        .upload-zone .title { font-weight: 600; font-size: 0.85rem; color: var(--white); }
+        .upload-zone .hint { font-size: 0.75rem; color: var(--gray-text); margin-top: 0.2rem; }
+        .upload-preview {
+            display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem;
+        }
+        .upload-preview .file-tag {
+            background: rgba(16,54,217,0.2); color: var(--light-blue);
+            padding: 0.2rem 0.5rem; border-radius: 6px;
+            font-size: 0.75rem; display: flex; align-items: center; gap: 0.3rem;
+        }
+        /* SUBMIT */
+        .submit-area {
+            background: linear-gradient(135deg, var(--inst-navy), var(--corp-blue));
+            border-radius: 12px; padding: 2rem;
+            box-shadow: var(--shadow-lg); text-align: center;
+            border: 2px solid var(--electric);
+            margin-top: 2rem;
+        }
+        .submit-area h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--white);
+        }
+        .submit-area p { font-size: 0.85rem; color: var(--gray-text); margin-bottom: 1.5rem; }
+        .btn-submit {
+            background: linear-gradient(135deg, var(--electric), #203079);
+            color: var(--white); border: none; padding: 1rem 3rem;
+            border-radius: 10px; font-size: 1.1rem;
+            font-family: 'Montserrat', sans-serif; font-weight: 700;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(16, 54, 217, 0.4);
+            letter-spacing: 0.5px;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(16, 54, 217, 0.5); }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        /* SUCCESS */
+        .success-screen {
+            display: none; text-align: center; padding: 3rem 2rem;
+        }
+        .success-screen.active { display: block; }
+        .success-screen .check {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: var(--electric); color: var(--white);
+            font-size: 2.5rem; line-height: 80px; margin: 0 auto 1.5rem;
+        }
+        .success-screen h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem; color: var(--white); margin-bottom: 0.5rem;
+        }
+        .success-screen p { color: var(--gray-text); max-width: 500px; margin: 0 auto; }
+        .downloads-box {
+            background: var(--section-bg); border-radius: 10px;
+            padding: 1.5rem; margin: 1.5rem auto; max-width: 600px;
+            border: 1px solid var(--border);
+        }
+        .downloads-box h4 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--light-blue); margin-bottom: 1rem;
+        }
+        .dl-btn {
+            display: inline-block; padding: 0.7rem 1.5rem;
+            margin: 0.4rem; border-radius: 8px; text-decoration: none;
+            font-family: 'Montserrat', sans-serif; font-weight: 600;
+            font-size: 0.85rem; transition: all 0.2s; cursor: pointer;
+        }
+        .dl-btn.primary {
+            background: var(--electric); color: var(--white);
+        }
+        .dl-btn.secondary {
+            background: rgba(255,255,255,0.1); color: var(--light-blue);
+            border: 1px solid var(--border);
+        }
+        .dl-btn:hover { transform: translateY(-1px); }
+        /* FOOTER */
+        footer {
+            background: var(--deep-navy); color: var(--gray-text);
+            text-align: center; padding: 2rem 1.5rem;
+            font-size: 0.8rem; margin-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+        footer .tagline {
+            font-style: italic; color: var(--light-blue);
+            max-width: 500px; margin: 0 auto 0.5rem;
+            opacity: 0.7;
+        }
+        footer a { color: var(--electric); text-decoration: none; font-weight: 600; }
+        /* Lema banner */
+        .lema-banner {
+            background: rgba(16,54,217,0.1);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 1.2rem 2rem; text-align: center;
+        }
+        .lema-banner p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem; color: var(--light-blue);
+            font-weight: 500; letter-spacing: 0.3px;
+            max-width: 700px; margin: 0 auto;
+        }
+        /* Responsive */
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.4rem; }
+            .hero .stats { gap: 1rem; }
+            .row { flex-direction: column; gap: 0; }
+            .row > .field { min-width: 100%; }
+            .container { padding: 1.5rem 1rem 3rem; }
+            nav { padding: 0.8rem 1rem; }
+            nav .logo-text { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="brand-group">
+            <a href="https://leadforgeia.com" class="logo-text">Lead<span>Forge</span>IA</a>
+            <span class="logo-sub">Revenue Lab</span>
+        </div>
+        <span class="tag">Diagnóstico Comercial</span>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Conoce tu operación. Llena tu pipeline.</h1>
+        <p>Este diagnóstico nos permite diseñar una estrategia de prospección a medida para tu negocio. Sin compromiso, sin venta — solo claridad.</p>
+        <p class="tagline">"No construimos ni vendemos software. Descubrimos quién está listo para comprar — y solo hasta que tú cierras, ganamos juntos."</p>
+        <div class="stats">
+            <div class="stat"><div class="num">~20</div><div class="label">minutos</div></div>
+            <div class="stat"><div class="num">100%</div><div class="label">confidencial</div></div>
+            <div class="stat"><div class="num">0</div><div class="label">spam garantizado</div></div>
+        </div>
+    </div>
+
+    <!-- LEMA -->
+    <div class="lema-banner">
+        <p>LeadForgeIA no automatiza el proceso de ventas. Automatiza la búsqueda del cliente que está listo para comprar.</p>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-bar">
+        <div class="track"><div class="fill" id="progressFill"></div></div>
+        <div class="label" id="progressLabel">0 de 8 secciones completadas</div>
+    </div>
+
+    <!-- FORM -->
+    <form id="diagnosticForm" class="container" novalidate>
+
+        <!-- SECCIÓN 0: Contacto -->
+        <div class="section" data-section="0">
+            <div class="section-header active" onclick="toggleSection(this)">
+                <span class="icon">👤</span>
+                <h2>Datos de Contacto</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body open">
+                <div class="section-content">
+                    <div class="row">
+                        <div class="field">
+                            <label>Nombre completo <span class="req">*</span></label>
+                            <input type="text" name="nombre" required placeholder="Ej: María González">
+                        </div>
+                        <div class="field">
+                            <label>Cargo / Rol <span class="req">*</span></label>
+                            <input type="text" name="cargo" required placeholder="Ej: Director Comercial">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label>Email corporativo <span class="req">*</span></label>
+                            <input type="email" name="email" required placeholder="nombre@empresa.com">
+                        </div>
+                        <div class="field">
+                            <label>Teléfono / WhatsApp <span class="req">*</span></label>
+                            <input type="tel" name="telefono" required placeholder="Ej: 55 1234 5678">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>LinkedIn personal</label>
+                        <input type="url" name="linkedin_personal" placeholder="https://linkedin.com/in/tu-perfil">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 1: Información General del Negocio -->
+        <div class="section" data-section="1">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="icon">🏢</span>
+                <h2>Información General del Negocio</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="row">
+                        <div class="field">
+                            <label>Nombre de la empresa <span class="req">*</span></label>
+                            <input type="text" name="empresa" required placeholder="Ej: Logística del Norte SA">
+                        </div>
+                        <div class="field">
+                            <label>Sitio web</label>
+                            <input type="url" name="website" placeholder="https://www.ejemplo.com">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label>Sector / Industria <span class="req">*</span></label>
+                            <select name="sector" required>
+                                <option value="">Selecciona...</option>
+                                <option value="tecnologia">Tecnología / SaaS</option>
+                                <option value="logistica">Logística / Transporte</option>
+                                <option value="manufactura">Manufactura / Industrial</option>
+                                <option value="salud">Salud / Farmacéutica</option>
+                                <option value="educacion">Educación / EdTech</option>
+                                <option value="finanzas">Finanzas / Fintech</option>
+                                <option value="hospitality">Hospitality / Hotelería</option>
+                                <option value="comercializadora">Comercializadora / Distribuidora</option>
+                                <option value="consultoria">Consultoría / Servicios Profesionales</option>
+                                <option value="inmobiliaria">Inmobiliaria / Real Estate</option>
+                                <option value="marketing">Marketing / Publicidad</option>
+                                <option value="alimentos">Alimentos / Bebidas</option>
+                                <option value="construccion">Construcción / Inmobiliario</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Años en el mercado</label>
+                            <select name="anos_mercado">
+                                <option value="<1">Menos de 1 año</option>
+                                <option value="1-3">1 a 3 años</option>
+                                <option value="3-5">3 a 5 años</option>
+                                <option value="5-10">5 a 10 años</option>
+                                <option value="10+">Más de 10 años</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Tamaño de empresa (empleados)</label>
+                            <select name="tamano_empresa">
+                                <option value="1-10">1–10</option>
+                                <option value="11-50">11–50</option>
+                                <option value="51-200">51–200</option>
+                                <option value="201-500">201–500</option>
+                                <option value="500+">Más de 500</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label>Cobertura geográfica</label>
+                            <select name="cobertura">
+                                <option value="local">Local (una ciudad/estado)</option>
+                                <option value="nacional">Nacional</option>
+                                <option value="latam">LATAM</option>
+                                <option value="internacional">Internacional</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Facturación anual aproximada (MXN)</label>
+                            <select name="facturacion">
+                                <option value="">Prefiero no decir</option>
+                                <option value="<5M">Menos de $5M</option>
+                                <option value="5-15M">$5M – $15M</option>
+                                <option value="15-50M">$15M – $50M</option>
+                                <option value="50-100M">$50M – $100M</option>
+                                <option value="100M+">Más de $100M</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Principales productos o servicios que venden <span class="req">*</span></label>
+                        <textarea name="productos" required placeholder="Describe brevemente qué vendes. Ej: Software ERP para PYMEs manufactureras, servicios de consultoría en supply chain..."></textarea>
+                        <div class="hint">Sé específico — esto nos ayuda a calificar leads con precisión.</div>
+                    </div>
+                    <div class="field">
+                        <label>Objetivos de negocio a corto plazo (6–12 meses)</label>
+                        <textarea name="objetivos_corto" placeholder="Ej: Crecer 30% en ventas, abrir 2 nuevas verticales, reducir dependencia de un solo cliente..."></textarea>
+                    </div>
+                    <div class="field">
+                        <label>Objetivos de negocio a mediano plazo (12–24 meses)</label>
+                        <textarea name="objetivos_mediano" placeholder="Ej: Expandir a mercado LATAM, lanzar nuevo producto, alcanzar $X de facturación..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: Oferta de Valor -->
+        <div class="section" data-section="2">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="icon">💎</span>
+                <h2>Oferta de Valor y Diferenciadores</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="field">
+                        <label>Propuesta de valor en una frase <span class="req">*</span></label>
+                        <input type="text" name="propuesta_valor" required placeholder="Ej: Reducimos el costo logístico de tu empresa en 25% con rutas optimizadas por IA">
+                        <div class="hint">Si un prospecto te pregunta "¿qué haces?" — ¿cómo respondes en una línea?</div>
+                    </div>
+                    <div class="field">
+                        <label>¿Qué te diferencia de tu competencia?</label>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" name="diferenciadores" value="rapidez"> Rapidez</label>
+                            <label><input type="checkbox" name="diferenciadores" value="precio"> Precio</label>
+                            <label><input type="checkbox" name="diferenciadores" value="servicio"> Servicio al cliente</label>
+                            <label><input type="checkbox" name="diferenciadores" value="personalizacion"> Personalización</label>
+                            <label><input type="checkbox" name="diferenciadores" value="cobertura"> Cobertura</label>
+                            <label><input type="checkbox" name="diferenciadores" value="tecnologia"> Tecnología</label>
+                            <label><input type="checkbox" name="diferenciadores" value="expertise"> Expertise sectorial</label>
+                            <label><input type="checkbox" name="diferenciadores" value="garantias"> Garantías</label>
+                            <label><input type="checkbox" name="diferenciadores" value="flexibilidad"> Flexibilidad</label>
+                            <label><input type="checkbox" name="diferenciadores" value="otro"> Otro</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>¿Qué prometen explícitamente a sus clientes?</label>
+                        <textarea name="promesas" placeholder="Ej: Entrega en 48hrs, respuesta en menos de 2hrs, 99.9% uptime, garantía de satisfacción..."></textarea>
+                        <div class="hint">SLAs, tiempos de respuesta, garantías — todo lo que comprometen.</div>
+                    </div>
+                    <div class="field">
+                        <label>Describe 2–3 casos de éxito de los que estés más orgulloso</label>
+                        <textarea name="casos_exito_text" placeholder="Ej: Cliente X en industria Y — logramos Z resultado en N semanas..."></textarea>
+                        <div class="hint">Esto nos da material social proof para las campañas.</div>
+                    </div>
+                    <div class="field">
+                        <label>Principales competidores</label>
+                        <textarea name="competidores" placeholder="Ej: Empresa A, Empresa B... ¿Quiénes son y por qué pierdes o ganas contra ellos?"></textarea>
+                        <div class="hint">Incluye tanto competidores grandes como los que más te pelean en tu nicho.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: Clientes y Mercado -->
+        <div class="section" data-section="3">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="icon">🎯</span>
+                <h2>Perfil de Clientes y Mercado Objetivo</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="field">
+                        <label>Modelo de negocio</label>
+                        <select name="modelo_negocio">
+                            <option value="B2B">B2B (ventas a empresas)</option>
+                            <option value="B2C">B2C (ventas a consumidor final)</option>
+                            <option value="B2B+B2C">Mixto (B2B + B2C)</option>
+                            <option value="B2B2C">B2B2C (canal + consumidor)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>¿Quién es tu cliente ideal? (ICP actual) <span class="req">*</span></label>
+                        <textarea name="icp" required placeholder="Ej: Empresas manufactureras de +100 empleados en el Bajío, con facturación >$50M, que usan SAP y tienen problemas de optimización de rutas..."></textarea>
+                        <div class="hint">Sé lo más específico posible: industria, tamaño, cargo del decisor, presupuesto, dolor principal.</div>
+                    </div>
+                    <div class="field">
+                        <label>¿Quién es el decisor típico en la compra?</label>
+                        <textarea name="decisor" placeholder="Ej: Director de operaciones, Gerente de compras, CEO en empresas <50 empleados..."></textarea>
+                    </div>
+                    <div class="field">
+                        <label>¿Cómo suelen comprar tus clientes?</label>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" name="canal_compra" value="directa"> Venta directa</label>
+                            <label><input type="checkbox" name="canal_compra" value="ecommerce"> eCommerce</label>
+                            <label><input type="checkbox" name="canal_compra" value="distribuidores"> Distribuidores</label>
+                            <label><input type="checkbox" name="canal_compra" value="licitaciones"> Licitaciones</label>
+                            <label><input type="checkbox" name="canal_compra" value="referidos"> Referidos</label>
+                            <label><input type="checkbox" name="canal_compra" value="marketplace"> Marketplaces</label>
+                            <label><input type="checkbox" name="canal_compra" value="otro"> Otro</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label>Ciclo de venta promedio</label>
+                            <select name="ciclo_venta">
+                                <option value="<7d">Menos de 7 días</option>
+                                <option value="1-2sem">1–2 semanas</option>
+                                <option value="1mes">1 mes</option>
+                                <option value="2-3mes">2–3 meses</option>
+                                <option value="3-6mes">3–6 meses</option>
+                                <option value="6mes+">Más de 6 meses</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Ticket promedio por venta (MXN)</label>
+                            <select name="ticket_promedio">
+                                <option value="<50K">Menos de $50K</option>
+                                <option value="50-150K">$50K – $150K</option>
+                                <option value="150K-500K">$150K – $500K</option>
+                                <option value="500K-2M">$500K – $2M</option>
+                                <option value="2M+">Más de $2M</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Factores clave en la decisión de compra</label>
+                        <textarea name="factores_compra" placeholder="Ej: Tiempo de entrega, soporte post-venta, integración con sistemas existentes, precio..."></textarea>
+                    </div>
+                    <div class="field">
+                        <label>¿Cuál es el principal desafío actual para atraer y retener clientes?</label>
+                        <textarea name="desafios" placeholder="Ej: Muchos leads pero pocos cierran, ciclos muy largos, alto CAC, dependencia excesiva de referidos..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4: Ventas y Marketing Actual -->
+        <div class="section" data-section="4">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="icon">📊</span>
+                <h2>Estrategia de Ventas y Marketing Actual</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="field">
+                        <label>Canales de venta actuales</label>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" name="canales_venta" value="directa"> Fuerza de ventas directa</label>
+                            <label><input type="checkbox" name="canales_venta" value="inbound"> Inbound (leads entrantes)</label>
+                            <label><input type="checkbox" name="canales_venta" value="ecommerce"> eCommerce</label>
+                            <label><input type="checkbox" name="canales_venta" value="distribuidores"> Distribuidores</label>
+                            <label><input type="checkbox" name="canales_venta" value="referidos"> Referidos / Networking</label>
+                            <label><input type="checkbox" name="canales_venta" value="linkedin"> LinkedIn</label>
+                            <label><input type="checkbox" name="canales_venta" value="eventos"> Eventos / Ferias</label>
+                            <label><input type="checkbox" name="canales_venta" value="otro"> Otro</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Equipo comercial actual</label>
+                        <div class="row">
+                            <div class="field">
+                                <label>Vendedores / SDRs</label>
+                                <input type="number" name="num_vendedores" min="0" placeholder="0">
+                            </div>
+                            <div class="field">
+                                <label>Marketing</label>
+                                <input type="number" name="num_marketing" min="0" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>¿Cómo generan leads hoy?</label>
+                        <textarea name="generacion_leads" placeholder="Ej: 40% referidos, 30% Google Ads, 20% LinkedIn, 10% ferias comerciales..."></textarea>
+                        <div class="hint">Aproxima los porcentajes por canal.</div>
+                    </div>
+                    <div class="field">
+                        <label>Presencia en redes sociales</label>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" name="redes" value="linkedin"> LinkedIn</label>
+                            <label><input type="checkbox" name="redes" value="facebook"> Facebook</label>
+                            <label><input type="checkbox" name="redes" value="instagram"> Instagram</label>
+                            <label><input type="checkbox" name="redes" value="tiktok"> TikTok</label>
+                            <label><input type="checkbox" name="redes" value="youtube"> YouTube</label>
+                            <label><input type="checkbox" name="redes" value="twitter"> X / Twitter</label>
+                            <label><input type="checkbox" name="redes" value="ninguna"> Ninguna activa</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>¿Hacen publicidad pagada?</label>
+                        <select name="ads_pagada">
+                            <option value="no">No</option>
+                            <option value="google">Solo Google Ads</option>
+                            <option value="meta">Solo Meta Ads (FB/IG)</option>
+                            <option value="linkedin">Solo LinkedIn Ads</option>
+                            <option value="varias">Varias plataformas</option>
+                            <option value="no_sabe">No estoy seguro</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label>Presupuesto mensual en marketing (MXN)</label>
+                            <select name="presupuesto_mkt">
+                                <option value="0">$0 (solo orgánico)</option>
+                                <option value="10-30K">$10K – $30K</option>
+                                <option value="30-50K">$30K – $50K</option>
+                                <option value="50-100K">$50K – $100K</option>
+                                <option value="100K+">Más de $100K</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>¿Cuántos leads reciben al mes?</label>
+                            <select name="leads_mes">
+                                <option value="<10">Menos de 10</option>
+                                <option value="10-50">10–50</option>
+                                <option value="50-100">50–100</option>
+                                <option value="100-300">100–300</option>
+                                <option value="300+">Más de 300</option>
+                                <option value="nose">No se mide</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>¿Tasa de cierre aproximada?</label>
+                            <select name="tasa_cierre">
+                                <option value="<5%">Menos de 5%</option>
+                                <option value="5-10%">5% – 10%</option>
+                                <option value="10-20%">10% – 20%</option>
+                                <option value="20-40%">20% – 40%</option>
+                                <option value="40%+">Más de 40%</option>
+                                <option value="nose">No se mide</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>¿Usan CRM?</label>
+                        <select name="crm_actual">
+                            <option value="no">No usamos CRM</option>
+                            <option value="hubspot">HubSpot</option>
+                            <option value="salesforce">Salesforce</option>
+                            <option value="pipedrive">Pipedrive</option>
+                            <option value="zoho">Zoho CRM</option>
+                            <option value="excel">Excel / Hojas de cálculo</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>¿Realizan email marketing?</label>
+                        <select name="email_mkt">
+                            <option value="no">No</option>
+                            <option value="ocasional">Ocasionalmente</option>
+                            <option value="regular">Regularmente (semanal/quincenal)</option>
+                            <option value="automated">Automatizado (secuencias, nurturing)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Tamaño de base de datos de contactos</label>
+                        <select name="tamano_bd">
+                            <option value="<500">Menos de 500</option>
+                            <option value="500-2K">500 – 2,000</option>
+                            <option value="2K-10K">2,000 – 10,000</option>
+                            <option value="10K-50K">10,000 – 50,000</option>
+                            <option value="50K+">Más de 50,000</option>
+                            <option value="nose">No se cuántos son</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 5: Proceso Comercial (SPIN) -->
+        <div class="section" data-section="5">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="icon">⚙️</span>
+                <h2>Proceso Comercial — Cómo Vendes Hoy</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="field">
+                        <label>¿Cómo llega un lead a tu empresa hoy?</label>
+                        <textarea name="origen_lead" placeholder="Ej: 40% llega por web, 30% por WhatsApp, 20% por referido, 10% por eventos..."></textarea>
+                    </div>
+                    <div class="field">
+                        <label>Describe el proceso desde que llega un lead hasta que cierra la venta</label>
+                        <textarea name="proceso_venta" placeholder="Ej: 1) Lead llena formulario → 2) SDR llama en 2hrs para qualificar → 3) Si califica, se agenda demo → 4) AE presenta propuesta → 5) Negociación → 6) Cierre o pérdida"></textarea>
+                        <div class="hint">Incluye pasos, tiempos y quién interviene en cada etapa.</div>
+                    </div>
+                    <div class="field">
+                        <label>¿Dónde sientes que se pierden más oportunidades?</label>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" name="fugas" value="sin_respuesta"> No responden a tiempo</label>
+                            <label><input type="checkbox" name="fugas" value="sin_seguimiento"> Falta de seguimiento</label>
+                            <label><input type="checkbox" name="fugas" value="mala_qual"> Mala calificación</label>
+                            <label><input type="checkbox" name="fugas" value="propuesta_clara"> Propuesta poco clara</label>
+                            <label><input type="checkbox" name="fugas" value="precio"> Precio (pierden contra competencia)</label>
+                            <label><input type="checkbox" name="fugas" value="decision_lenta"> Decisión lenta del prospecto</label>
+                            <label><input type="checkbox" name="fugas" value="otro"> Otro</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>¿Cuánto tiempo entre primer contacto y la propuesta?</label>
+                        <select name="tiempo_propuesta">
+                            <option value="<24h">Menos de 24 horas</option>
+                            <option value="1-3dias">1–3 días</option>
+                            <option value="1sem">1 semana</option>
+                            <option value="2sem">2 semanas</option>
+                            <option value="1mes+">Más de 1 mes</option>
+                            <option value="nose">No se mide</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>¿Cuál ha sido tu mejor mes de ventas y qué pasó diferente?</label>
+                        <textarea name="mejor_mes" placeholder="Ej: En octubre cerramos 12 deals porque lanzamos una promo de fin de año..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 6: Oportunidades con LeadForgeIA -->
+        <div class="section" data-section="6">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="icon">🚀</span>
+                <h2>Metas y Expectativas con LeadForgeIA</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="field">
+                        <label>¿Qué resultado específico quieres ver con LeadForgeIA? <span class="req">*</span></label>
+                        <textarea name="objetivo_leadforgeia" required placeholder="Ej: 30 reuniones calificadas al mes, o $500K en pipeline nuevo en 60 días..."></textarea>
+                        <div class="hint">Sé lo más concreto posible en número y tiempo.</div>
+                    </div>
+                    <div class="field">
+                        <label>¿Qué áreas de tu proceso comercial te gustaría automatizar?</label>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" name="automatizar" value="investigacion"> Investigación de prospectos</label>
+                            <label><input type="checkbox" name="automatizar" value="contacto"> Primer contacto (outreach)</label>
+                            <label><input type="checkbox" name="automatizar" value="seguimiento"> Seguimiento automático</label>
+                            <label><input type="checkbox" name="automatizar" value="calificacion"> Calificación / Scoring</label>
+                            <label><input type="checkbox" name="automatizar" value="agendamiento"> Agendamiento de reuniones</label>
+                            <label><input type="checkbox" name="automatizar" value="linkedin"> Warm-up en LinkedIn</label>
+                            <label><input type="checkbox" name="automatizar" value="email"> Secuencias de email</label>
+                            <label><input type="checkbox" name="automatizar" value="crm"> Actualización de CRM</label>
+                            <label><input type="checkbox" name="automatizar" value="todo"> Todo lo anterior</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>¿Qué tan cómodo estás con agentes de IA interactuando con tus prospectos?</label>
+                        <div class="range-field">
+                            <span>0</span>
+                            <input type="range" name="comodidad_ia" min="0" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value">
+                            <span class="val">5</span>
+                            <span>10</span>
+                        </div>
+                        <div class="hint">0 = "Solo humano", 10 = "IA total, sin intervención humana"</div>
+                    </div>
+                    <div class="field">
+                        <label>¿KPIs principales que mides hoy?</label>
+                        <textarea name="kpis" placeholder="Ej: 50 leads/mes, 15 reuniones, 5 propuestas, 2 cierres, ticket promedio $300K..."></textarea>
+                    </div>
+                    <div class="field">
+                        <label>¿Qué te preocupa sobre automatizar prospección?</label>
+                        <textarea name="preocupaciones" placeholder="Ej: Que suene robótico, perder toque personal, compliance regulatorio..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 7: Restricciones y Compliance -->
+        <div class="section" data-section="7">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="icon">⚠️</span>
+                <h2>Restricciones y Compliance</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="field">
+                        <label>Sectores, clientes o regiones donde NO prospectar</label>
+                        <textarea name="exclusiones" placeholder="Ej: No prospectar empresas de gobierno, no competir con distribuidor principal en CDMX..."></textarea>
+                    </div>
+                    <div class="field">
+                        <label>Mensajes o promesas que NO debamos usar</label>
+                        <textarea name="prohibidos" placeholder="Ej: No mencionar descuentos, no compararnos con Competidor X..."></textarea>
+                    </div>
+                    <div class="field">
+                        <label>¿Qué aprobaciones internas se requieren para lanzar campañas?</label>
+                        <textarea name="aprobaciones" placeholder="Ej: Director de marketing aprueba todo, legal revisa claims antes de publicar..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 8: Documentos Adjuntos -->
+        <div class="section" data-section="8">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="icon">📎</span>
+                <h2>Documentos y Material de Marca</h2>
+                <span class="arrow">▾</span>
+            </div>
+            <div class="section-body">
+                <div class="section-content">
+                    <div class="field">
+                        <label>Logotipo de la empresa</label>
+                        <div class="upload-zone" id="uploadLogo">
+                            <input type="file" name="logo" accept="image/png,image/jpeg,image/svg,image/webp,.svg" onchange="handleFile(this, 'previewLogo')">
+                            <div class="icon">🖼️</div>
+                            <div class="title">Haz clic o arrastra tu logotipo aquí</div>
+                            <div class="hint">PNG, JPG, SVG — preferiblemente alta resolución</div>
+                        </div>
+                        <div class="upload-preview" id="previewLogo"></div>
+                    </div>
+                    <div class="field">
+                        <label>Guía de marca o manual de identidad</label>
+                        <div class="upload-zone" id="uploadBrand">
+                            <input type="file" name="guia_marca" accept=".pdf,.doc,.docx" onchange="handleFile(this, 'previewBrand')">
+                            <div class="icon">📘</div>
+                            <div class="title">Adjunta tu guía de marca</div>
+                            <div class="hint">PDF o Word — colores oficiales, tipografías</div>
+                        </div>
+                        <div class="upload-preview" id="previewBrand"></div>
+                    </div>
+                    <div class="field">
+                        <label>Presentación comercial o pitch deck</label>
+                        <div class="upload-zone" id="uploadPitch">
+                            <input type="file" name="pitch_deck" accept=".pdf,.ppt,.pptx" onchange="handleFile(this, 'previewPitch')">
+                            <div class="icon">📊</div>
+                            <div class="title">Adjunta tu presentación comercial</div>
+                            <div class="hint">PPTX o PDF — la que usas con prospectos</div>
+                        </div>
+                        <div class="upload-preview" id="previewPitch"></div>
+                    </div>
+                    <div class="field">
+                        <label>Catálogo de productos o lista de precios</label>
+                        <div class="upload-zone" id="uploadCatalog">
+                            <input type="file" name="catalogo" accept=".pdf,.xlsx,.xls,.csv,.doc,.docx" onchange="handleFile(this, 'previewCatalog')">
+                            <div class="icon">📋</div>
+                            <div class="title">Adjunta catálogo o lista de precios</div>
+                            <div class="hint">PDF, Excel o Word</div>
+                        </div>
+                        <div class="upload-preview" id="previewCatalog"></div>
+                    </div>
+                    <div class="field">
+                        <label>Casos de éxito, testimonios o social proof</label>
+                        <div class="upload-zone" id="uploadCasos">
+                            <input type="file" name="casos_exito_files" accept=".pdf,.doc,.docx,image/*" multiple onchange="handleFile(this, 'previewCasos')">
+                            <div class="icon">⭐</div>
+                            <div class="title">Adjunta casos de éxito o testimonios</div>
+                            <div class="hint">Múltiples archivos permitidos</div>
+                        </div>
+                        <div class="upload-preview" id="previewCasos"></div>
+                    </div>
+                    <div class="field">
+                        <label>Cualquier otro documento relevante</label>
+                        <div class="upload-zone" id="uploadOtros">
+                            <input type="file" name="otros_docs" accept="*" multiple onchange="handleFile(this, 'previewOtros')">
+                            <div class="icon">📁</div>
+                            <div class="title">Adjunta otros documentos</div>
+                            <div class="hint">Contratos modelo, one-pagers, propuestas, etc.</div>
+                        </div>
+                        <div class="upload-preview" id="previewOtros"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="submit-area">
+            <h3>🔥 ¿Listo para enviar?</h3>
+            <p>Al enviar recibirás tu diagnóstico completo + un Pitch Deck personalizado basado en tus respuestas. Todo se descarga directamente.</p>
+            <button type="submit" class="btn-submit" id="btnSubmit">
+                Enviar Diagnóstico y Descargar Documentos →
+            </button>
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--gray-text);" id="submitStatus"></p>
+        </div>
+    </form>
+
+    <!-- SUCCESS SCREEN -->
+    <div class="success-screen" id="successScreen">
+        <div class="check">✓</div>
+        <h2>¡Diagnóstico completado!</h2>
+        <p>Tu información ha sido procesada. Descarga los documentos generados con tu análisis personalizado.</p>
+
+        <div class="downloads-box">
+            <h4>📄 Tus documentos personalizados</h4>
+            <button class="dl-btn primary" onclick="downloadJSON()">⬇ Descargar Datos (JSON)</button>
+            <button class="dl-btn primary" onclick="downloadPitchDeck()">⬇ Descargar Pitch Deck Personalizado</button>
+            <p style="margin-top:1rem; font-size:0.75rem; color:var(--gray-text);">
+                También recibirás contacto de LeadForgeIA en menos de 48 horas.
+            </p>
+        </div>
+
+        <p style="margin-top: 1rem;"><a href="https://leadforgeia.com" style="color: var(--electric); text-decoration: none; font-weight: 700;">← Volver a LeadForgeIA</a></p>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p class="tagline">"No construimos ni vendemos software. Descubrimos quién está listo para comprar."</p>
+        <p style="margin-top:0.5rem;">© 2026 <a href="https://leadforgeia.com">LeadForgeIA Revenue Lab</a></p>
+        <p>Querétaro, México · <a href="mailto:contacto@leadforgeia.com">contacto@leadforgeia.com</a></p>
+    </footer>
+
+    <script>
+        // =====================================================
+        // GLOBAL DATA
+        // =====================================================
+        let formResponses = {};
+
+        // =====================================================
+        // Toggle sections
+        // =====================================================
+        function toggleSection(header) {
+            const body = header.nextElementSibling;
+            const isOpen = body.classList.contains('open');
+            header.classList.toggle('active', !isOpen);
+            body.classList.toggle('open', !isOpen);
+        }
+
+        // =====================================================
+        // File preview
+        // =====================================================
+        function handleFile(input, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = '';
+            const files = input.files;
+            for (let f of files) {
+                const sizeMB = (f.size / (1024*1024)).toFixed(1);
+                const tag = document.createElement('span');
+                tag.className = 'file-tag';
+                tag.textContent = f.name + ' (' + sizeMB + 'MB)';
+                preview.appendChild(tag);
+            }
+            updateProgress();
+        }
+
+        // =====================================================
+        // Progress bar
+        // =====================================================
+        function updateProgress() {
+            const sections = document.querySelectorAll('.section[data-section]');
+            let filled = 0;
+            const total = sections.length;
+            sections.forEach(s => {
+                const fields = s.querySelectorAll('input:not([type=file]), textarea, select');
+                const hasContent = Array.from(fields).some(f => {
+                    if (f.type === 'checkbox') return f.checked;
+                    if (f.type === 'range') return true;
+                    return f.value.trim() !== '';
+                });
+                if (hasContent) filled++;
+            });
+            const pct = Math.round((filled / total) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent = filled + ' de ' + total + ' secciones con contenido';
+        }
+
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+            el.addEventListener('input', updateProgress);
+            el.addEventListener('change', updateProgress);
+        });
+
+        // =====================================================
+        // Collect form data
+        // =====================================================
+        function collectFormData() {
+            const form = document.getElementById('diagnosticForm');
+            const fd = new FormData(form);
+            const data = {};
+
+            // Group checkboxes
+            const checkboxNames = ['diferenciadores','canal_compra','canales_venta','redes','fugas','automatizar'];
+
+            fd.forEach((value, key) => {
+                if (checkboxNames.includes(key)) {
+                    if (data[key] === undefined) data[key] = [];
+                    data[key].push(value);
+                } else if (data[key] !== undefined) {
+                    data[key] = data[key] + ', ' + value;
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            data.timestamp = new Date().toISOString();
+            data.source = 'web_diagnostico';
+            return data;
+        }
+
+        // =====================================================
+        // Form submission
+        // =====================================================
+        document.getElementById('diagnosticForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            const status = document.getElementById('submitStatus');
+
+            btn.disabled = true;
+            btn.textContent = 'Generando documentos...';
+            status.textContent = '⏳ Procesando tu diagnóstico...';
+
+            // Collect all data
+            formResponses = collectFormData();
+
+            // Save to localStorage
+            const submissions = JSON.parse(localStorage.getItem('lfia_diagnosticos') || '[]');
+            submissions.push(formResponses);
+            localStorage.setItem('lfia_diagnosticos', JSON.stringify(submissions));
+
+            status.textContent = '✅ Documentos listos para descargar';
+
+            // Show success screen
+            setTimeout(() => {
+                document.getElementById('diagnosticForm').style.display = 'none';
+                document.getElementById('successScreen').classList.add('active');
+                document.querySelector('.progress-bar').style.display = 'none';
+                btn.textContent = 'Enviar Diagnóstico y Descargar Documentos →';
+            }, 800);
+        });
+
+        // =====================================================
+        // Download JSON
+        // =====================================================
+        function downloadJSON() {
+            const json = JSON.stringify(formResponses, null, 2);
+            const blob = new Blob([json], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const name = (formResponses.empresa || 'empresa').replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ ]/g, '');
+            a.href = url;
+            a.download = 'diagnostico_' + name + '_' + new Date().toISOString().slice(0,10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // =====================================================
+        // Generate and Download Pitch Deck (HTML)
+        // =====================================================
+        function downloadPitchDeck() {
+            const r = formResponses;
+            const empresa = r.empresa || 'Tu Empresa';
+            const sector = r.sector || 'General';
+            const ticket = r.ticket_promedio || 'No especificado';
+            const ciclo = r.ciclo_venta || 'No especificado';
+            const cierre = r.tasa_cierre || 'No especificada';
+            const leads = r.leads_mes || 'No se mide';
+            const objetivos = r.objetivo_leadforgeia || 'No especificado';
+            const diferenciadores = Array.isArray(r.diferenciadores) ? r.diferenciadores.join(', ') : (r.diferenciadores || 'N/A');
+            const desafios = r.desafios || 'No especificados';
+            const fugas = Array.isArray(r.fugas) ? r.fugas.join(', ') : (r.fugas || 'N/A');
+            const objetivo = r.objetivo_leadforgeia || '';
+            const automatizar = Array.isArray(r.automatizar) ? r.automatizar.join(', ') : (r.automatizar || 'N/A');
+
+            // Calculate lead value estimate
+            const leadValueEstimate = 'Estimación basada en ticket promedio (' + (ticket) + ') y tasa de cierre (' + (cierre) + ')' ;
+
+            const pitchHTML = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pitch Deck — ` + empresa + `</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0A1028;--deep:#000B29;--inst:#152051;--corp:#203079;--accent:#2A40A2;--electric:#1036D9;--light:#D6EBFF;--white:#FFFFFF;--gray:#B0B8C8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Roboto',sans-serif;background:var(--navy);color:var(--white);padding:0;}
+.slide{
+    min-height:100vh; background:var(--navy); padding:4rem 3rem;
+    display:flex;flex-direction:column;justify-content:center;
+    border-bottom:2px solid var(--inst);page-break-after:always;
+}
+.slide .tagline{font-size:0.8rem;color:var(--light);text-transform:uppercase;letter-spacing:3px;font-family:'Montserrat',sans-serif;margin-bottom:0.5rem;}
+.slide h1{font-family:'Montserrat',sans-serif;font-size:2.5rem;font-weight:800;margin-bottom:0.5rem;background:linear-gradient(90deg,var(--white),var(--light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.slide h2{font-family:'Montserrat',sans-serif;font-size:1.8rem;font-weight:700;color:var(--electric);margin-bottom:1.5rem;}
+.slide p{font-size:1rem;color:var(--gray);max-width:700px;line-height:1.7;margin-bottom:0.8rem;}
+.slide ul{list-style:none;padding:0;}
+.slide ul li{padding:0.5rem 0;padding-left:1.5rem;position:relative;color:var(--gray);font-size:0.95rem;}
+.slide ul li::before{content:'→';position:absolute;left:0;color:var(--electric);font-weight:700;}
+.mega-num{font-family:'Montserrat',sans-serif;font-size:4rem;font-weight:800;color:var(--electric);margin:0.5rem 0;}
+.mega-label{font-size:1rem;color:var(--gray);text-transform:uppercase;letter-spacing:2px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;margin-top:2rem;}
+.card{background:var(--inst);border-radius:12px;padding:1.5rem;border:1px solid var(--accent);}
+.card h3{font-family:'Montserrat',sans-serif;color:var(--light);font-size:0.85rem;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:1px;}
+.card .val{font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:700;color:var(--white);}
+.leadforge-logo{font-family:'Montserrat',sans-serif;font-size:1.3rem;font-weight:800;color:var(--white);margin-bottom:2rem;}
+.leadforge-logo span{color:var(--light);}
+footer{text-align:center;padding:2rem;color:var(--gray);font-size:0.8rem;}
+footer a{color:var(--electric);text-decoration:none;}
+@media print{.slide{min-height:auto;border:none;}}
+</style>
+</head><body>
+
+<!-- SLIDE 1: PORTADA -->
+<div class="slide">
+    <p class="tagline">LeadForgeIA · Revenue Lab</p>
+    <h1>Diagnóstico Comercial</h1>
+    <p style="font-size:1.3rem;color:var(--light);margin-top:0.5rem;">` + empresa + `</p>
+    <p style="font-size:1rem;color:var(--gray);margin-top:0.3rem;">Sector: ` + sector + ` · ` + new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'}) + `</p>
+    <p style="margin-top:2rem;color:var(--gray);font-style:italic;font-size:0.9rem;max-width:550px;">"No construimos ni vendemos software. Descubrimos quién está listo para comprar — y solo hasta que tú cierras, ganamos juntos."</p>
+</div>
+
+<!-- SLIDE 2: SITUACIÓN ACTUAL -->
+<div class="slide">
+    <p class="tagline">Slide 02</p>
+    <h2>Situación Actual de ` + empresa + `</h2>
+    <div class="grid">
+        <div class="card"><h3>Leads / mes</h3><div class="val">` + leads + `</div></div>
+        <div class="card"><h3>Tasa de cierre</h3><div class="val">` + cierre + `</div></div>
+        <div class="card"><h3>Ciclo de venta</h3><div class="val">` + ciclo + `</div></div>
+        <div class="card"><h3>Ticket promedio</h3><div class="val">` + ticket + `</div></div>
+    </div>
+    <p style="margin-top:2rem;"><strong style="color:var(--white);">Diferenciadores:</strong> ` + diferenciadores + `</p>
+    <p><strong style="color:var(--white);">Desafíos identificados:</strong> ` + desafios + `</p>
+</div>
+
+<!-- SLIDE 3: FUGAS DEL PIPELINE -->
+<div class="slide">
+    <p class="tagline">Slide 03</p>
+    <h2>Dónde se pierden tus oportunidades</h2>
+    <ul>
+        <li><strong style="color:var(--white);">Puntos de fuga:</strong> ` + fugas + `</li>
+        <li><strong style="color:var(--white);">Ticket promedio:</strong> ` + ticket + `</li>
+        <li><strong style="color:var(--white);">Ciclo actual:</strong> ` + ciclo + `</li>
+        <li>` + leadValueEstimate + `</li>
+    </ul>
+    <p style="margin-top:1.5rem;font-size:1.1rem;color:var(--light);">Cada lead no seguido a tiempo es una venta que se pierde. LeadForgeIA cierra esa brecha.</p>
+</div>
+
+<!-- SLIDE 4: OBJETIVOS Y PROPUESTA -->
+<div class="slide">
+    <p class="tagline">Slide 04</p>
+    <h2>Tu objetivo con LeadForgeIA</h2>
+    <p style="font-size:1.2rem;color:var(--white);margin-bottom:1.5rem;">"` + objetivo + `"</p>
+    <h2 style="margin-top:2rem;">Áreas a automatizar</h2>
+    <ul>`;
+
+            const autoItems = automatizar.split(', ');
+            autoItems.forEach(item => {
+                pitchHTML += `<li>` + item + `</li>`;
+            });
+
+            pitchHTML += `</ul>
+</div>
+
+<!-- SLIDE 5: PROPUESTA LEADFORGEIA -->
+<div class="slide">
+    <p class="tagline">Slide 05</p>
+    <h2>Propuesta LeadForgeIA para ` + empresa + `</h2>
+    <div class="grid">
+        <div class="card"><h3>Fase 1</h3><div class="val">Investigación ICP</div><p style="font-size:0.85rem;margin-top:0.3rem;">Identificación de prospectos con dolor real</p></div>
+        <div class="card"><h3>Fase 2</h3><div class="val">Acercamiento</div><p style="font-size:0.85rem;margin-top:0.3rem;">Warm-up personalizado en LinkedIn</p></div>
+        <div class="card"><h3>Fase 3</h3><div class="val">Contacto</div><p style="font-size:0.85rem;margin-top:0.3rem;">Mensajes consultivos SPIN Selling</p></div>
+        <div class="card"><h3>Fase 4</h3><div class="val">Seguimiento</div><p style="font-size:0.85rem;margin-top:0.3rem;">Seguimiento de valor cada 72h</p></div>
+    </div>
+    <p style="margin-top:2rem;font-size:1.2rem;color:var(--white);;"><strong>Modelo: 100% a éxito</strong> — Sin setup. Sin mensualidades. Ganamos si tú cierras.</p>
+</div>
+
+<!-- SLIDE 6: CIERRE -->
+<div class="slide">
+    <div class="leadforge-logo">Lead<span>Forge</span>IA</div>
+    <h1>Próximos pasos</h1>
+    <ul>
+        <li><strong style="color:var(--white);">Diagnóstico 30 min</strong> — Revisamos estos hallazgos juntos</li>
+        <li><strong style="color:var(--white);">Definir ICP + mensajes</strong> — Personalizamos agentes</li>
+        <li><strong style="color:var(--white);">Piloto 4–6 semanas</strong> — Primeros leads calificados</li>
+    </ul>
+    <p style="margin-top:2rem;font-size:1.1rem;color:var(--light);">"LeadForgeIA no automatiza el proceso de ventas. Automatiza la búsqueda del cliente que está listo para comprar."</p>
+    <p style="margin-top:2rem;"><a href="https://leadforgeia.com" style="color:var(--electric);text-decoration:none;font-weight:700;">www.leadforgeia.com</a></p>
+    <p style="color:var(--gray);font-size:0.85rem;">contacto@leadforgeia.com · Querétaro, México</p>
+</div>
+
+</body></html>`;
+
+            const blob = new Blob([pitchHTML], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const name = (r.empresa || 'empresa').replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ ]/g, '');
+            a.href = url;
+            a.download = 'PitchDeck_' + name + '_LeadForgeIA.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('Pitch Deck personalizado descargado!');
+        }
+    </script>
+</body>
+</html>
